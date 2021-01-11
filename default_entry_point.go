@@ -8,11 +8,17 @@ import (
 
 type defaultEntryPoint struct{}
 
+// Create and defaultEntryPoint instance for EntryPoint interface
+// Can be used for JWT authentication.
 func NewDefaultEntryPoint() EntryPoint {
 	return new(defaultEntryPoint)
 }
 
-func (e defaultEntryPoint) Commence(ctx context.Context, status EntryPointStatus, w http.ResponseWriter) (err error) {
+
+// Commence is the function where the response generate for authentication, authorization errors
+// If there is any error when the authentication, function need to returns the error.
+// 'status' value is the same value that is return by request_filter.go > RequestFilter.DoFilter.
+func (e defaultEntryPoint) Commence(ctx context.Context, EntryPointStatus EntryPointStatus, w http.ResponseWriter) (err error) {
 
 	statusCode := http.StatusOK
 	switch status.Code {
@@ -32,7 +38,7 @@ func (e defaultEntryPoint) Commence(ctx context.Context, status EntryPointStatus
 		return nil
 	}
 
-	// Build the auth error response
+	// Build the authentication/authorization error response
 	contentType, body := "text/plain; charset=utf-8", []byte(err.Error())
 	w.Header().Set("Content-Type", contentType)
 	w.WriteHeader(statusCode)
