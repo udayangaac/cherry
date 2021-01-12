@@ -1,7 +1,6 @@
-// Copyright 2021 by Chamith Udayange. All rights reserved.
+// Copyright 2021 by Chamith Udayanga. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
 
 package cherry
 
@@ -33,6 +32,7 @@ type HandlerConfig struct {
 	Endpoint Endpoint
 }
 
+// NewServer create a
 func NewServer(config HandlerConfig) (path string, s *Server) {
 
 	// Initialize the server with default configuration
@@ -75,6 +75,8 @@ func NewServer(config HandlerConfig) (path string, s *Server) {
 	return config.Path, &ser
 }
 
+// All defined function related the http request are executing inside
+// this function. No need to implement custom ServeHTTP functions.
 func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var (
 		err   error

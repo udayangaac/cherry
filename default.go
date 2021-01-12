@@ -1,7 +1,6 @@
-// Copyright 2021 by Chamith Udayange. All rights reserved.
+// Copyright 2021 by Chamith Udayanga. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
 
 package cherry
 
@@ -58,8 +57,8 @@ func NopDecoder(ctx context.Context, r *http.Request) (data interface{}, err err
 // DefaultJSONEncoder encode the data to JSON format and returning with HTTP status code 200 (OK)
 // It can be used as success response's encoder for JSON responses.
 func DefaultJSONEncoder(ctx context.Context, w http.ResponseWriter, data interface{}) (err error) {
-	bodyByteArr := make([]byte,0)
-	bodyByteArr,err =  json.Marshal(data)
+	bodyByteArr := make([]byte, 0)
+	bodyByteArr, err = json.Marshal(data)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(bodyByteArr)

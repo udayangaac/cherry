@@ -1,7 +1,6 @@
-// Copyright 2021 by Chamith Udayange. All rights reserved.
+// Copyright 2021 by Chamith Udayanga. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
 
 package cherry
 
@@ -18,7 +17,6 @@ type defaultEntryPoint struct{}
 func NewDefaultEntryPoint() EntryPoint {
 	return new(defaultEntryPoint)
 }
-
 
 // Commence is the function where the response generate for authentication, authorization errors
 // If there is any error when the authentication, function need to returns the error.
