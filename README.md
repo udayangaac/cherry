@@ -1,7 +1,7 @@
 # Cherry
 Go library Back-end Services for authentication and authorization capabilities.
 
-##Structure
+## Structure
  ...
 #### Sample Code
 ```go
@@ -18,12 +18,10 @@ import (
 
 func main() {
 
-    router: = mux.NewRouter()
-
-        jwtConfig: = cherry.JwtConfig {
+    router := mux.NewRouter()
+        jwtConfig := cherry.JwtConfig {
         Secret: "1qaz2wsx!",
-        ValidDuration: 60 * time.Second,
-    }
+        ValidDuration: 60 * time.Second}
 
         cherry.GetGlobalConfig().
     WithEncoder(getEncoder()).
@@ -72,8 +70,8 @@ func getHelloEndpoint() cherry.Endpoint {
 
 func getEncoder() cherry.EncodeResponseFunc {
     return func(ctx context.Context, w http.ResponseWriter, data interface {})(err error) {
-        dataStr, _: = data.(string)
-        contentType, body: = "text/plain; charset=utf-8", [] byte(dataStr)
+        dataStr, _ := data.(string)
+        contentType, body := "text/plain; charset=utf-8", [] byte(dataStr)
         w.WriteHeader(http.StatusOK)
         w.Header().Set("Content-Type", contentType)
         _, err = w.Write(body)
