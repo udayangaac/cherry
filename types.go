@@ -9,19 +9,23 @@ import (
 	"net/http"
 )
 
-// DecodeRequestFunc extracting data from HTTP request returning the extracted values
-// from the request or returning the decode error.
+// DecodeRequestFunc extracts data from HTTP request returning the extracted
+// values or returning decode error.
 type DecodeRequestFunc func(context.Context, *http.Request) (interface{}, error)
 
-// EncodeResponseFunc response data is written to the http.ResponseWriter and if eny
-// error occurred it must be return as a error.
-type EncodeResponseFunc func(context.Context, http.ResponseWriter, interface{}) error
-
-// End
+// Endpoint Authentication, response can be captured and success response must be
+// return.
 type Endpoint func(context.Context, Authentication, interface{}) (interface{}, error)
 
+// EncodeResponseFunc encodes the data returning from the Endpoint.
+type EncodeResponseFunc func(context.Context, http.ResponseWriter, interface{}) error
+
+// ErrorEncoder encodes the error responses.
 type ErrorEncoder func(context.Context, error, http.ResponseWriter)
 
+// ExtractTokenFunc extracts the token from the request and must be return as a string
 type ExtractTokenFunc func(ctx context.Context, r *http.Request) (token string, err error)
 
+// InitializeRequestFunc, The context of the function stack for a certain request can be
+// changed here.
 type InitializeRequestFunc func(ctx context.Context, r *http.Request) (ctxR context.Context)

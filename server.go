@@ -32,7 +32,8 @@ type HandlerConfig struct {
 	Endpoint Endpoint
 }
 
-// NewServer create a
+// NewServer creates a reference of the server instance with
+// defined configurations.
 func NewServer(config HandlerConfig) (path string, s *Server) {
 
 	// Initialize the server with default configuration

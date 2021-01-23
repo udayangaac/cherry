@@ -111,9 +111,10 @@ func isExpired(iat, exp int, validDuration time.Duration) (isExpired bool) {
 	return
 }
 
-// GenerateJwtToke generate Jwt token with the values of fields inside the @param auth
-// Valid duration and Secret key must be parse with JwtConfig.
-// NewJwtRequestFilter(./request_filter_jwt_impl.go > NewJwtRequestFilter ) config structure must be same.
+// GenerateJwtToke generates Jwt token with the values of fields inside the
+// parameter auth  Valid duration and Secret key must be parse with JwtConfig.
+// NewJwtRequestFilter(./request_filter_jwt_impl.go > NewJwtRequestFilter ) config
+// structure must be same.
 func GenerateJwtToke(auth Authentication, config JwtConfig) (token string, err error) {
 	tokenObj := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":    auth.ID,

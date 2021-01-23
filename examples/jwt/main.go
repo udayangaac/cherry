@@ -20,7 +20,10 @@ func main() {
 
 	cherry.GetGlobalConfig().
 		WithEncoder(getEncoder()).
-		WithRequestFilter(cherry.NewJwtRequestFilter(jwtConfig))
+		WithRequestFilter(cherry.NewJwtRequestFilter(jwtConfig)).
+		WithRequestInitializer(func(ctx context.Context, r *http.Request) (ctxR context.Context) {
+			return
+		}).WithEntryPoint()
 
 	router.Handle(cherry.NewServer(cherry.HandlerConfig{
 		Path:     "/authenticate",
@@ -56,7 +59,6 @@ func getHelloEndpoint() cherry.Endpoint {
 		return "Hello world", nil
 	}
 }
-
 
 func getEncoder() cherry.EncodeResponseFunc {
 	return func(ctx context.Context, w http.ResponseWriter, data interface{}) (err error) {

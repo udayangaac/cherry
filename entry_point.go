@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+// Entry point status can be used to
+// create authentication and authorization error responses
 type EntryPointStatus struct {
 	Code int
 	Desc string
@@ -22,5 +24,8 @@ const (
 )
 
 type EntryPoint interface {
+	// Commence can be used to create response based on status(EntryPointStatus).
+	// If response need to be terminated, err must be return and response must be written to the
+	// http.ResponseWriter.
 	Commence(ctx context.Context, status EntryPointStatus, w http.ResponseWriter) (err error)
 }

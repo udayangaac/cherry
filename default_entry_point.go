@@ -21,10 +21,10 @@ func NewDefaultEntryPoint() EntryPoint {
 // Commence is the function where the response generate for authentication, authorization errors
 // If there is any error when the authentication, function need to returns the error.
 // 'status' value is the same value that is return by request_filter.go > RequestFilter.DoFilter.
-func (e defaultEntryPoint) Commence(ctx context.Context, EntryPointStatus EntryPointStatus, w http.ResponseWriter) (err error) {
+func (e defaultEntryPoint) Commence(ctx context.Context, entryPointStatus EntryPointStatus, w http.ResponseWriter) (err error) {
 
 	statusCode := http.StatusOK
-	switch status.Code {
+	switch entryPointStatus.Code {
 	case InvalidToken:
 		statusCode = http.StatusBadRequest
 		err = errors.New("invalid token")
@@ -46,5 +46,4 @@ func (e defaultEntryPoint) Commence(ctx context.Context, EntryPointStatus EntryP
 	w.Header().Set("Content-Type", contentType)
 	w.WriteHeader(statusCode)
 	w.Write(body)
-	return
 }
