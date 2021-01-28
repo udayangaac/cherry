@@ -94,6 +94,9 @@ func (j jwtRequestFilter) DoFilter(ctx context.Context, token string, roles []st
 }
 
 func isValidRole(roles []string, rolesOfToken []string) (isValidRole bool) {
+	if len(roles) == 0 {
+		return true
+	}
 	rolesMap := make(map[string]bool)
 	for _, v := range roles {
 		rolesMap[v] = true
