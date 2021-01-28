@@ -13,16 +13,16 @@ type ErrorHandler interface {
 	Handle(ctx context.Context, err error)
 }
 
-type LogErrorHandler struct {
+type logErrorHandler struct {
 	logger *log.Logger
 }
 
-func NewLogErrorHandler(logger *log.Logger) *LogErrorHandler {
-	return &LogErrorHandler{
+func NewLogErrorHandler(logger *log.Logger) ErrorHandler {
+	return &logErrorHandler{
 		logger: logger,
 	}
 }
 
-func (h *LogErrorHandler) Handle(ctx context.Context, err error) {
+func (h *logErrorHandler) Handle(ctx context.Context, err error) {
 	h.logger.Println(err)
 }

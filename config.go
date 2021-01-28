@@ -6,13 +6,13 @@ package cherry
 
 // Default settings initialization
 type globalConfig struct {
-	dec           DecodeRequestFunc
-	enc           EncodeResponseFunc
-	errEnc        ErrorEncoder
-	errHandler    ErrorHandler
-	entryPoint    EntryPoint
-	requestFilter RequestFilter
-	ir            InitializeRequestFunc
+	dec                   DecodeRequestFunc
+	enc                   EncodeResponseFunc
+	errEnc                ErrorEncoder
+	errHandler            ErrorHandler
+	entryPoint            EntryPoint
+	requestFilter         RequestFilter
+	initializeRequestFunc InitializeRequestFunc
 }
 
 var gConf *globalConfig
@@ -51,6 +51,6 @@ func (g *globalConfig) WithRequestFilter(requestFilter RequestFilter) *globalCon
 }
 
 func (g *globalConfig) WithRequestInitializer(initializer InitializeRequestFunc) *globalConfig {
-	g.ir = initializer
+	g.initializeRequestFunc = initializer
 	return g
 }

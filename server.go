@@ -11,16 +11,16 @@ import (
 )
 
 type Server struct {
-	dec        DecodeRequestFunc
-	enc        EncodeResponseFunc
-	ep         Endpoint
-	errEnc     ErrorEncoder
-	errHandler ErrorHandler
-	entryPoint EntryPoint
-	rf         RequestFilter
-	et         ExtractTokenFunc
-	r          []string
-	ir         InitializeRequestFunc
+	dec                   DecodeRequestFunc
+	enc                   EncodeResponseFunc
+	endpoint              Endpoint
+	errEnc                ErrorEncoder
+	errHandler            ErrorHandler
+	entryPoint            EntryPoint
+	requestFilter         RequestFilter
+	extractTokenFunc      ExtractTokenFunc
+	role                  []string
+	initializeRequestFunc InitializeRequestFunc
 }
 
 // Configuration specified to there
@@ -39,14 +39,14 @@ func NewServer(config HandlerConfig) (path string, s *Server) {
 	// Initialize the server with default configuration
 	// For specific routes.
 	ser := Server{
-		dec:        NopDecoder,
-		enc:        warningEncoder,
-		ep:         getWarningEndpoint(config.Path),
-		errEnc:     defaultErrorEncoder,
-		errHandler: NewLogErrorHandler(log.New(os.Stderr, "", log.LstdFlags)),
-		entryPoint: NewDefaultEntryPoint(),
-		et:         getExtractTokenFunc(),
-		r:          config.Role,
+		dec:              NopDecoder,
+		enc:              warningEncoder,
+		endpoint:         getWarningEndpoint(config.Path),
+		errEnc:           defaultErrorEncoder,
+		errHandler:       NewLogErrorHandler(log.New(os.Stderr, "", log.LstdFlags)),
+		entryPoint:       NewDefaultEntryPoint(),
+		extractTokenFunc: getExtractTokenFunc(),
+		role:             config.Role,
 	}
 
 	// Assigning custom configurations
@@ -58,7 +58,7 @@ func NewServer(config HandlerConfig) (path string, s *Server) {
 		ser.enc = config.Encoder
 	}
 	if config.Endpoint != nil {
-		ser.ep = config.Endpoint
+		ser.endpoint = config.Endpoint
 	}
 
 	// Assigning custom configurations
@@ -69,16 +69,17 @@ func NewServer(config HandlerConfig) (path string, s *Server) {
 	if gConf.enc != nil {
 		ser.enc = gConf.enc
 	}
-	if gConf.ir != nil {
-		ser.ir = gConf.ir
-	}
 
 	if gConf.requestFilter != nil {
-		ser.rf = gConf.requestFilter
+		ser.requestFilter = gConf.requestFilter
 	}
 
-	if gConf.ir != nil {
-		ser.ir = gConf.ir
+	if gConf.initializeRequestFunc != nil {
+		ser.initializeRequestFunc = gConf.initializeRequestFunc
+	}
+
+	if gConf.errHandler != nil {
+		ser.errHandler = gConf.errHandler
 	}
 
 	return config.Path, &ser
@@ -94,26 +95,26 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	if s.ir != nil {
-		ctx = s.ir(ctx, r)
+	if s.initializeRequestFunc != nil {
+		ctx = s.initializeRequestFunc(ctx, r)
 	}
 
 	epStatus := EntryPointStatus{}
 	auth := Authentication{}
 
-	if s.r == nil {
+	if s.role == nil {
 		goto requestProcessStart
 	}
 
-	token, err = s.et(ctx, r)
+	token, err = s.extractTokenFunc(ctx, r)
 	if err != nil {
 		epStatus = EntryPointStatus{
 			Code: InvalidToken,
 			Desc: "Invalid or empty token",
 		}
 	}
-	if s.rf != nil && err == nil {
-		auth, epStatus = s.rf.DoFilter(ctx, token, s.r)
+	if s.requestFilter != nil && err == nil {
+		auth, epStatus = s.requestFilter.DoFilter(ctx, token, s.role)
 	}
 
 	err = s.entryPoint.Commence(ctx, epStatus, w)
@@ -130,7 +131,7 @@ requestProcessStart:
 		return
 	}
 
-	response, err := s.ep(ctx, auth, request)
+	response, err := s.endpoint(ctx, auth, request)
 	if err != nil {
 		s.errEnc(ctx, err, w)
 		s.errHandler.Handle(ctx, err)
