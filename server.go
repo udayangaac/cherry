@@ -102,7 +102,7 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	auth := Authentication{}
 
 	if s.r == nil {
-		goto startRP
+		goto requestProcessStart
 	}
 
 	token, err = s.et(ctx, r)
@@ -122,7 +122,7 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-startRP:
+requestProcessStart:
 	request, err := s.dec(ctx, r)
 	if err != nil {
 		s.errEnc(ctx, err, w)

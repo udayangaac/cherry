@@ -56,7 +56,7 @@ func (j jwtRequestFilter) DoFilter(ctx context.Context, token string, roles []st
 				return
 			}
 
-			if isValidRole(roles, c.Roles) {
+			if !isValidRole(roles, c.Roles) {
 				status = EntryPointStatus{
 					Code: Unauthorized,
 					Desc: "unauthorized",
