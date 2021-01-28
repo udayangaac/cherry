@@ -118,8 +118,8 @@ func isExpired(iat, exp int, validDuration time.Duration) (isExpired bool) {
 func GenerateJwtToke(auth Authentication, config JwtConfig) (token string, err error) {
 	tokenObj := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":    auth.ID,
-		"roles": auth,
-		"data":  auth.Roles,
+		"roles": auth.Roles,
+		"data":  auth.Data,
 		"iat":   time.Now().Unix(),
 		"exp":   time.Now().Unix() + int64(config.ValidDuration.Seconds()),
 	})
