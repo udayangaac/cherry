@@ -73,6 +73,14 @@ func NewServer(config HandlerConfig) (path string, s *Server) {
 		ser.ir = gConf.ir
 	}
 
+	if gConf.requestFilter != nil {
+		ser.rf = gConf.requestFilter
+	}
+
+	if gConf.ir != nil {
+		ser.ir = gConf.ir
+	}
+
 	return config.Path, &ser
 }
 
