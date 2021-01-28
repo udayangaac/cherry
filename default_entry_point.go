@@ -46,4 +46,5 @@ func (e defaultEntryPoint) Commence(ctx context.Context, entryPointStatus EntryP
 	w.Header().Set("Content-Type", contentType)
 	w.WriteHeader(statusCode)
 	w.Write(body)
+	return
 }
