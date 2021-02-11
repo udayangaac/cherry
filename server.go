@@ -32,10 +32,9 @@ type HandlerConfig struct {
 	Endpoint Endpoint
 }
 
-// NewServer creates a reference of the server instance with
+// NewHandler creates a reference of the server instance with
 // defined configurations.
-func NewServer(config HandlerConfig) (path string, s *Server) {
-
+func NewHandler(config HandlerConfig) (path string, s *Server) {
 	// Initialize the server with default configuration
 	// For specific routes.
 	ser := Server{
