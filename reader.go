@@ -99,9 +99,9 @@ func (r *reader) setValue(value reflect.Value, readValue string) (err error) {
 		value.SetFloat(convertedVal)
 
 	case reflect.Complex64, reflect.Complex128:
-		var convertedVal complex128
-		convertedVal, err = strconv.ParseComplex(readValue, 64)
-		value.SetComplex(convertedVal)
+		//var convertedVal complex128
+		//convertedVal, err = strconv.ParseComplex(readValue, 64)
+		//value.SetComplex(convertedVal)
 	case reflect.Array:
 	case reflect.String:
 		value.SetString(readValue)
