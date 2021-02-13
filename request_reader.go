@@ -21,13 +21,13 @@ const (
 	Json          = "json"
 )
 
-type Reader interface {
+type RequestReader interface {
 	Read(ctx context.Context, req *http.Request, i interface{}) (err error)
 }
 
 type reader struct{}
 
-func NewReader() Reader {
+func NewRequestReader() RequestReader {
 	return &reader{}
 }
 

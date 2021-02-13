@@ -31,7 +31,7 @@ func TestReader_Read(t *testing.T) {
 		Price:      0,
 		SampleBody: new(SampleBody),
 	}
-	if err := NewReader().Read(ctx, req, &s); err != nil {
+	if err := NewRequestReader().Read(ctx, req, &s); err != nil {
 		t.Error(err.Error())
 	}
 	t.Log(s)
