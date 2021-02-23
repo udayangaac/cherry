@@ -84,13 +84,9 @@ func NewHandler(config HandlerConfig) (path string, s *Server) {
 	return config.Path, &ser
 }
 
-// All defined function related the http request are executing inside
-// this function. No need to implement custom ServeHTTP functions.
 func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	var (
-		err   error
-		token string
-	)
+	var err error
+	var token string
 
 	ctx := r.Context()
 
@@ -105,8 +101,7 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		goto requestProcessStart
 	}
 
-	token, err = s.extractTokenFunc(ctx, r)
-	if err != nil {
+	if token, err = s.extractTokenFunc(ctx, r); err != nil {
 		epStatus = EntryPointStatus{
 			Code: InvalidToken,
 			Desc: "Invalid or empty token",
@@ -123,15 +118,16 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 requestProcessStart:
-	request, err := s.dec(ctx, r)
-	if err != nil {
+	var request interface{}
+	var response interface{}
+
+	if request, err = s.dec(ctx, r); err != nil {
 		s.errEnc(ctx, err, w)
 		s.errHandler.Handle(ctx, err)
 		return
 	}
 
-	response, err := s.endpoint(ctx, auth, request)
-	if err != nil {
+	if response, err = s.endpoint(ctx, auth, request); err != nil {
 		s.errEnc(ctx, err, w)
 		s.errHandler.Handle(ctx, err)
 		return

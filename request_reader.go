@@ -11,9 +11,6 @@ import (
 	"strconv"
 )
 
-// Content types (v1)
-// application/x-www-form-urlencoded
-// application/json
 const (
 	QueryParamTag = "param"
 	BodyTag       = "body"
@@ -73,7 +70,6 @@ func (r *reader) read(_ context.Context, req *http.Request, i interface{}) (err 
 }
 
 func (r *reader) setValue(value reflect.Value, readValue string) (err error) {
-	// Return for empty values
 	if len(readValue) == 0 {
 		return
 	}
@@ -99,9 +95,6 @@ func (r *reader) setValue(value reflect.Value, readValue string) (err error) {
 		value.SetFloat(convertedVal)
 
 	case reflect.Complex64, reflect.Complex128:
-		//var convertedVal complex128
-		//convertedVal, err = strconv.ParseComplex(readValue, 64)
-		//value.SetComplex(convertedVal)
 	case reflect.Array:
 	case reflect.String:
 		value.SetString(readValue)
