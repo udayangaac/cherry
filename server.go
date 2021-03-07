@@ -69,6 +69,10 @@ func NewHandler(config HandlerConfig) (path string, s *Server) {
 		ser.enc = gConf.enc
 	}
 
+	if gConf.errEnc != nil {
+		ser.errEnc = gConf.errEnc
+	}
+
 	if gConf.requestFilter != nil {
 		ser.requestFilter = gConf.requestFilter
 	}
@@ -98,7 +102,7 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	auth := Authentication{}
 
 	if s.role == nil {
-		goto requestProcessStart
+		goto jumpToRequestProcess
 	}
 
 	if token, err = s.extractTokenFunc(ctx, r); err != nil {
@@ -117,7 +121,7 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-requestProcessStart:
+jumpToRequestProcess:
 	var request interface{}
 	var response interface{}
 
